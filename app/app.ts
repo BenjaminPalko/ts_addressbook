@@ -1,6 +1,6 @@
 
 /*  Custom Components   */
-import {database_functions} from "./db_controller";
+import {database_functions} from "./model/db_controller";
 
 /*  Express */
 import express = require('express');
@@ -10,6 +10,7 @@ const app: express.Application = express();
 app.get('/', function(req, res) {
     res.send('Hello world!');
 });
+
 
 /**
  * Get addressbook from database given user id
@@ -23,6 +24,9 @@ app.get('/addressbook', function (req, res) {
     );
 });
 
-app.listen(3000, function () {
-    console.log('App is listening on port 3000...')
+/*  Server Initialization   */
+let server_port = process.env.SERVER_PORT;
+
+app.listen(server_port, function () {
+    console.log('App is listening on port ', server_port);
 })
