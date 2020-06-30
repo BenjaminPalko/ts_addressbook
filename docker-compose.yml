@@ -1,17 +1,5 @@
 version: "2"
 services:
-  app:
-    build: ./app
-    image: webapp
-    ports:
-    - "3000:3000"
-    volumes: []
-    links:
-      - redis
-    environment:
-      SERVER_PORT: 3000
-  redis:
-    image: redis
   db:
     image: postgres
     ports:
@@ -19,6 +7,25 @@ services:
     environment:
       POSTGRES_USER: "_admin"
       POSTGRES_PASSWORD: "_password"
+      POSTGRES_DB: "addressbook"
+    volumes:
+    - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+  api:
+    build: api
+    image: api
+    container_name: nodejs_api
+    depends_on:
+      - db
+    ports:
+    - "3000:3000"
+    volumes: []
+    environment:
+      SERVER_PORT: 3000
+      PGUSER : "_admin"
+      PGPASSWORD : "_password"
+      PGDATABASE: "addressbook"
+      PGHOST: "db"
+
 volumes:
   logvolume01: {}
 
