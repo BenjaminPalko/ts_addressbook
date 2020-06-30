@@ -26,6 +26,15 @@ services:
       PGDATABASE: "addressbook"
       PGHOST: "db"
 
+  angular-app:
+    build: app
+    image: angular-app
+    container_name: angular-app
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
+
 volumes:
   logvolume01: {}
 
