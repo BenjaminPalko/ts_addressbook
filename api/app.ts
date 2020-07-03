@@ -22,7 +22,7 @@ app.get('/', function(req, res) {
 /**
  * Get addressbook from database given user id
  */
-app.put('/user', function (req, res) {
+app.put('/user', (req, res) => {
 
     let address: Address = new Address(
         <string>req.query.address,
@@ -46,6 +46,20 @@ app.put('/user', function (req, res) {
     }).catch(() => {
 
     })
+});
+
+app.get('/user', (req, res) => {
+
+});
+
+app.get('/user/:id/address', (req, res) => {
+    try {
+        let id: number = Number(req.params.id);
+        _database.getUserById(id)
+    } catch (e) {
+        res.status(500);
+        res.send()
+    }
 });
 
 app.get('/address', (req, res) => {

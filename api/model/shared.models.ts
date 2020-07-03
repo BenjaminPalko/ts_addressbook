@@ -2,6 +2,7 @@
 export module shared_classes {
 
     export class Address {
+
         public address: string;
         public postalCode: string;
         public city: string;
@@ -37,23 +38,25 @@ export module shared_classes {
     export class User {
 
         public firstName: string;
-        public middleinitial: string;
+        public middlename: string;
         public lastName: string;
+        public age: number;
         public sex: string;
         public address: Address;
 
         /**
          *
          * @param firstName
-         * @param middleinitial
+         * @param middlename
          * @param lastName
-         * @param sex 'm'/'M' OR 'f'/'F'
+         * @param sex 'm' OR 'f'
          * @param address
          */
-        constructor(firstName: string, middleinitial: string, lastName: string, sex: string, address: Address) {
+        constructor(firstName: string, middlename: string, lastName: string, age: number, sex: string, address: Address) {
             this.firstName = firstName;
-            this.middleinitial = middleinitial;
+            this.middlename = middlename;
             this.lastName = lastName;
+            this.age = age;
             this.sex = sex;
             this.address = address;
         }

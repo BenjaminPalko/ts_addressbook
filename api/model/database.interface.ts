@@ -44,22 +44,67 @@ export module _database {
      */
     export async function getAddresses(): Promise<QueryResult> {
         logger.info('Retrieving addresses');
-        let text = 'select * from AddressBook';
+        let text = 'select * from addressbook';
 
         return await client.query(text)
     }
 
-    export async function saveAddress(entry: Address) {
+    export async function saveAddress(entry: Address): Promise<QueryResult> {
         logger.info('Saving AddressBook: ' + entry);
-        let text = 'insert into AddressBook(address, postalcode, city, province, country) values ($1, $2, $3, $4, $5)';
+        let text = 'insert into addressbook(address, postalcode, city, province, country) values ($1, $2, $3, $4, $5)';
         let values = [entry.address, entry.postalCode.replace(/\s/g, ""), entry.city, entry.province, entry.country];
 
-        await client.query(text, values)
+        return await client.query(text, values)
+    }
+
+    export function saveOrRetrieveAddressKey(address: Address): number {
+        let text = 'select * from createorretrieveaddressbookkey($1, $2, $3, $4, $5)';
+        let values = [address.address, address.postalCode, address.city, address.province, address.country];
+        let key: number = -1;
+
+        client.query(text, values).then((ret) => {
+            key = Number(ret.rows[0])
+        }).catch((err) => {
+            logger.error(`${err}`)
+        })
+        return key
     }
 
     export async function saveUser(user: User) {
-
-        let text = 'select * from addressbook where ($1, $2, $3, $4, $5)';
+        let text: string = 'select * from createorretrieveaddressbookkey($1, $2, $3, $4, $5)';
         let values = [user.address.address, user.address.postalCode, user.address.city, user.address.province, user.address.country];
+        let address_key: number;
+        client.query(text, values).then((value => {
+            address_key = value.rows[0]
+        })).catch((err) => {
+            logger.error(`${err}`);
+            return
+        })
+
+        text = 'insert into users(address_key, firstname, middlename, lastname, age, sex) VALUES ($1, $2, $3, $4, $5)';
+        values = [];
+        let values2 = [address_key, user.firstName, user.middlename, user.lastName, user.age, user.sex];
+        await client.query(text, values2)
+    }
+
+    export function getUsers(): User[] {
+        let users: User[] = [];
+        let text = 'select * from users join addressbook a on users.address_fk = a.pk';
+
+        return users
+    }
+
+    export function getUserById(id: number): User {
+        let text = 'select * from users where user_key = $1'
+        let value = [id]
+
+        let user;
+        client.query(text, value).then((ret) => {
+            user = ret.rows[0]
+        }).catch((err) => {
+            logger.error(`${err}`)
+            throw new Error(`${err}`)
+        })
+        return new User(user['firstname'], user['middlename'], user['lastname'], user['age'], user['sex'], null)
     }
 }
