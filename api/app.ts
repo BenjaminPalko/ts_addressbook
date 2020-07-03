@@ -63,21 +63,10 @@ app.get('/user/:id/address', (req, res) => {
 });
 
 app.get('/address', (req, res) => {
-    _database.getAddresses().then((result) => {
-        logger.info('' + result.rows);
-        let addressbook: Array<Address> = new Array<Address>();
-        for(let row of result.rows) {
-            addressbook.push(new Address(
-                row['address'], row['postalcode'], row['city'], row['province'], row['country']
-            ));
-        }
-        res.status(200);
-        res.send(addressbook)
-    }).catch((e) => {
-        logger.error(e);
-        res.status(500)
-    });
-
+    let addressbook: Address[] = _database.getAddresses();
+    logger.info('Sending results');
+    res.status(200);
+    res.send(addressbook)
 });
 
 app.put('/address', (req, res) => {

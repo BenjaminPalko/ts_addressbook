@@ -42,15 +42,23 @@ export module _database {
     /**
      * Gets all entries in the AddressBook table
      */
-    export async function getAddresses(): Promise<QueryResult> {
-        logger.info('Retrieving addresses');
+    export function getAddresses(): Address[] {
         let text = 'select * from addressbook';
+        let addressbook: Address[] = [];
 
-        return await client.query(text)
+        client.query(text).then((ret) => {
+            for(let row of ret.rows){
+                addressbook.push(
+                    new Address(row['address'], row['postalcode'], row['city'], row['province'], row['country'])
+                )
+            }
+        }).catch((err) => {
+            logger.error(`${err}`)
+        })
+        return addressbook;
     }
 
     export async function saveAddress(entry: Address): Promise<QueryResult> {
-        logger.info('Saving AddressBook: ' + entry);
         let text = 'insert into addressbook(address, postalcode, city, province, country) values ($1, $2, $3, $4, $5)';
         let values = [entry.address, entry.postalCode.replace(/\s/g, ""), entry.city, entry.province, entry.country];
 
