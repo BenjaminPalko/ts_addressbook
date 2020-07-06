@@ -68,43 +68,44 @@ export module _database {
     }
 
     export function saveOrRetrieveAddressKey(address: Address): number {
-        let text = 'select * from createorretrieveaddressbookkey($1, $2, $3, $4, $5)';
+        let text = 'select * from CreateRetrieveAddressBook($1, $2, $3, $4, $5)';
         let values = [address.address, address.postalCode, address.city, address.province, address.country];
         let key: number = -1;
 
         client.query(text, values).then((ret) => {
-            key = Number(ret.rows[0])
+            key = Number(ret.rows[0]['address_key'])
         }).catch((err) => {
-            logger.error(`${err}`)
+            throw new Error(`${err}`)
         })
         return key
     }
 
-    export async function saveUser(user: User) {
-        let text: string = 'select * from createorretrieveaddressbookkey($1, $2, $3, $4, $5)';
-        let values = [user.address.address, user.address.postalCode, user.address.city, user.address.province, user.address.country];
-        let address_key: number;
-        client.query(text, values).then((value => {
-            address_key = value.rows[0]
-        })).catch((err) => {
-            logger.error(`${err}`);
-            return
+    export function saveUser(user: User, key: number) {
+
+        let text = 'insert into users(address_key, firstname, middlename, lastname, age, sex) VALUES ($1, $2, $3, $4, $5)';
+        let values = [key, user.firstName, user.middlename, user.lastName, user.age, user.sex];
+        client.query(text, values).catch((err) => {
+            throw new Error(`${err}`)
         })
-
-        text = 'insert into users(address_key, firstname, middlename, lastname, age, sex) VALUES ($1, $2, $3, $4, $5)';
-        values = [];
-        let values2 = [address_key, user.firstName, user.middlename, user.lastName, user.age, user.sex];
-        await client.query(text, values2)
     }
 
-    export function getUsers(): User[] {
+    /*export function getUsers(): User[] {
         let users: User[] = [];
-        let text = 'select * from users join addressbook a on users.address_fk = a.pk';
+        let text = 'select * from users join addressbook ab on users.address_key = ab.addressbook_key';
 
-        return users
-    }
+        client.query(text).then((ret) => {
+            for (let row of ret.rows) {
+                users.push(
+                    new User(row['firstname'], row['middlename'], row['lastname'], row['age'], row['sex'])
+                )
+            }
+        }).catch((err) => {
+            logger.error(`${err}`)
+        })
+        return users;
+    }*/
 
-    export function getUserById(id: number): User {
+    /*export function getUserById(id: number): User {
         let text = 'select * from users where user_key = $1'
         let value = [id]
 
@@ -116,5 +117,5 @@ export module _database {
             throw new Error(`${err}`)
         })
         return new User(user['firstname'], user['middlename'], user['lastname'], user['age'], user['sex'], null)
-    }
+    }*/
 }

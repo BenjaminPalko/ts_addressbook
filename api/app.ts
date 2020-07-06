@@ -42,10 +42,16 @@ app.put('/user', (req, res) => {
         address
     );
 
-    _database.saveUser(user).then(() => {
-        logger.info('Added entry ' + user);
+    try{
+        let key: number =_database.saveOrRetrieveAddressKey(address);
+        _database.saveUser(user, key)
         res.status(200);
-    }).catch(() => {
+        res.send('GREAT SUCCESS!')
+    } catch (e) {
+        logger.error(`${e}`);
+        res.status(500);
+        res.send()
+    }
 
     })
 });
@@ -57,7 +63,7 @@ app.get('/user', (req, res) => {
 app.get('/user/:id/address', (req, res) => {
     try {
         let id: number = Number(req.params.id);
-        _database.getUserById(id)
+        //_database.getUserById(id)
     } catch (e) {
         res.status(500);
         res.send()
