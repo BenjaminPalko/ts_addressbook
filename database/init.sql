@@ -1,4 +1,4 @@
-
+/*  Tables  */
 create table if not exists AddressBook
 (
 	addressbook_key serial not null,
@@ -40,13 +40,34 @@ alter table users
 	add constraint users_pk
 		primary key (user_key);
 
-CREATE OR REPLACE FUNCTION CreateOrRetrieveAddressBookKey(add VARCHAR(40), pos VARCHAR(6), cit VARCHAR(30), pro VARCHAR(30), cou VARCHAR(30))
-    RETURNS numeric AS $$
+/*  Functions   */
+CREATE OR REPLACE FUNCTION CreateRetrieveAddressBook(address_p VARCHAR(40), postalcode_p VARCHAR(6), city_p VARCHAR(30),
+                                                     province_p VARCHAR(30), country_p VARCHAR(30))
+    RETURNS TABLE (address_key integer, address VARCHAR(40), postalcode VARCHAR(6), city VARCHAR(30),
+                   province VARCHAR(30), country VARCHAR(30)) AS
+$$
 BEGIN
-    IF not exists(select * from addressbook where address = add and postalcode = pos and city = cit and province = pro and country = cou limit 1) THEN
-        insert into addressbook(address, postalcode, city, province, country) VALUES (add, pos, cit, pro, cou);
+    IF not exists(select *
+                  from addressbook ab
+                  where ab.address = address_p
+                    and ab.postalcode = postalcode_p
+                    and ab.city = city_p
+                    and ab.province = province_p
+                    and ab.country = country_p
+                  limit 1) THEN
+        insert into addressbook(address, postalcode, city, province, country)
+        VALUES (address_p, postalcode_p, city_p, province_p, country_p);
     END IF;
-    select addressbook_key from addressbook where address = add and postalcode = pos and city = cit and province = pro and country = cou limit 1;
-end; $$ LANGUAGE plpgsql
+    RETURN QUERY select *
+                 from addressbook ab
+                 where ab.address = address_p
+                   and ab.postalcode = postalcode_p
+                   and ab.city = city_p
+                   and ab.province = province_p
+                   and ab.country = country_p
+                 limit 1;
+END
+$$ LANGUAGE plpgsql
+
 
 
