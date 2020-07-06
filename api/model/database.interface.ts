@@ -53,7 +53,7 @@ export module _database {
                 )
             }
         }).catch((err) => {
-            logger.error(`${err}`)
+            throw new Error(`${err}`)
         })
         return addressbook;
     }
@@ -63,7 +63,6 @@ export module _database {
         let values = [entry.address, entry.postalCode.replace(/\s/g, ""), entry.city, entry.province, entry.country];
 
         client.query(text, values).catch((err) => {
-            logger.error(`${err}`);
             throw new Error(`${err}`)
         })
     }
