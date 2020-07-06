@@ -16,7 +16,8 @@ const logger: Logger = factory.getLogger(
 );
 
 app.get('/', function(req, res) {
-    res.send('Hello world!');
+    res.status(200);
+    res.send('Hello world!')
 });
 
 /**
