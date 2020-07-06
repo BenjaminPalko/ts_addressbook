@@ -25,18 +25,19 @@ app.get('/', function(req, res) {
 app.put('/user', (req, res) => {
 
     let address: Address = new Address(
-        <string>req.query.address,
-        <string>req.query.postal,
-        <string>req.query.city,
-        <string>req.query.province,
-        <string>req.query.country
+        String(req.query.address),
+        String(req.query.postal),
+        String(req.query.city),
+        String(req.query.province),
+        String(req.query.country)
     ).parse();
 
     let user: User = new User(
-        <string>req.query.firstname,
-        <string>req.query.middleinitial,
-        <string>req.query.lastname,
-        <string>req.query.sex,
+        String(req.query.firstname),
+        String(req.query.middleinitial),
+        String(req.query.lastname),
+        Number(req.query.age),
+        String(req.query.sex),
         address
     );
 
