@@ -64,10 +64,15 @@ app.get('/user/:id/address', (req, res) => {
 });
 
 app.get('/address', (req, res) => {
-    let addressbook: Address[] = _database.getAddresses();
-    logger.info('Sending results');
-    res.status(200);
-    res.send(addressbook)
+    try {
+        let addressbook: Address[] = _database.getAddresses();
+        res.status(200);
+        res.send(addressbook)
+    } catch (e) {
+        logger.error(`${e}`);
+        res.status(500);
+        res.send()
+    }
 });
 
 app.put('/address', (req, res) => {
