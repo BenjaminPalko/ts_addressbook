@@ -79,15 +79,15 @@ app.put('/address', (req, res) => {
         <string>req.query.country
     ).parse();
 
-    _database.saveAddress(entry).then(() => {
-        logger.info('Added entry ' + entry);
+    try {
+        _database.saveAddress(entry);
         res.status(200);
-        res.send('GREAT SUCCESS')
-    }).catch(() => {
-        logger.info('Failed to add entry to database');
+        res.send('GREAT SUCCESS!')
+    } catch (e) {
+        logger.error(`${e}`);
         res.status(500);
         res.send()
-    });
+    }
 });
 
 /*  Server Initialization   */

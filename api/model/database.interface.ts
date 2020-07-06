@@ -58,11 +58,14 @@ export module _database {
         return addressbook;
     }
 
-    export async function saveAddress(entry: Address): Promise<QueryResult> {
+    export function saveAddress(entry: Address) {
         let text = 'insert into addressbook(address, postalcode, city, province, country) values ($1, $2, $3, $4, $5)';
         let values = [entry.address, entry.postalCode.replace(/\s/g, ""), entry.city, entry.province, entry.country];
 
-        return await client.query(text, values)
+        client.query(text, values).catch((err) => {
+            logger.error(`${err}`);
+            throw new Error(`${err}`)
+        })
     }
 
     export function saveOrRetrieveAddressKey(address: Address): number {
