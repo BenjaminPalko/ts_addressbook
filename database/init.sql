@@ -25,7 +25,7 @@ create table users
 	user_key serial not null
 		constraint users_address_fk
 			references addressbook,
-	address_key serial not null,
+	addressbook_key serial not null,
 	firstname varchar(30) not null,
 	middlename varchar(30) not null,
 	lastname varchar(30) not null,
@@ -43,7 +43,7 @@ alter table users
 /*  Functions   */
 CREATE OR REPLACE FUNCTION CreateRetrieveAddressBook(address_p VARCHAR(40), postalcode_p VARCHAR(6), city_p VARCHAR(30),
                                                      province_p VARCHAR(30), country_p VARCHAR(30))
-    RETURNS TABLE (address_key integer, address VARCHAR(40), postalcode VARCHAR(6), city VARCHAR(30),
+    RETURNS TABLE (addressbook_key integer, address VARCHAR(40), postalcode VARCHAR(6), city VARCHAR(30),
                    province VARCHAR(30), country VARCHAR(30)) AS
 $$
 BEGIN

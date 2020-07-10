@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shared_functions = exports.shared_classes = void 0;
+exports.shared_classes = void 0;
 var shared_classes;
 (function (shared_classes) {
     var Address = /** @class */ (function () {
@@ -25,6 +25,7 @@ var shared_classes;
             this.city.trim();
             this.province.trim();
             this.country.trim();
+            return this;
         };
         return Address;
     }());
@@ -33,21 +34,19 @@ var shared_classes;
         /**
          *
          * @param firstName
+         * @param middlename
          * @param lastName
+         * @param sex 'm' OR 'f'
          * @param address
          */
-        function User(firstName, lastName, address) {
+        function User(firstName, middlename, lastName, age, sex) {
             this.firstName = firstName;
+            this.middlename = middlename;
             this.lastName = lastName;
-            this.address = address;
+            this.age = age;
+            this.sex = sex;
         }
         return User;
     }());
     shared_classes.User = User;
 })(shared_classes = exports.shared_classes || (exports.shared_classes = {}));
-var shared_functions;
-(function (shared_functions) {
-    function loadAddressFromRows() {
-    }
-    shared_functions.loadAddressFromRows = loadAddressFromRows;
-})(shared_functions = exports.shared_functions || (exports.shared_functions = {}));

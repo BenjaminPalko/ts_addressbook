@@ -42,7 +42,6 @@ export module shared_classes {
         public lastName: string;
         public age: number;
         public sex: string;
-        public address: Address;
 
         /**
          *
@@ -52,20 +51,12 @@ export module shared_classes {
          * @param sex 'm' OR 'f'
          * @param address
          */
-        constructor(firstName: string, middlename: string, lastName: string, age: number, sex: string, address: Address) {
+        constructor(firstName: string, middlename: string, lastName: string, age: number, sex: string) {
             this.firstName = firstName;
             this.middlename = middlename;
             this.lastName = lastName;
             this.age = age;
             this.sex = sex;
-            this.address = address;
         }
-    }
-}
-
-export module shared_functions {
-
-    export function loadAddressFromRows() {
-
     }
 }
