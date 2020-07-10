@@ -1,10 +1,9 @@
 FROM node:current-alpine
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+RUN mkdir -p /home/node/app/node_modules
 WORKDIR /home/node/app
 COPY package*.json ./
-COPY --chown=node:node . .
-USER node
+COPY . .
 RUN npm install
-RUN npm run tsc
+RUN npm install -g @angular/cli
 EXPOSE 4200
-CMD ["node", "app.js"]
+CMD ["ng", "serve"]

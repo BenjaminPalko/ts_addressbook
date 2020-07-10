@@ -2,7 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {process} from "@angular/compiler-cli/ngcc";
+
 export const environment = {
+  apiURL: 'api',
   production: false
 };
 
